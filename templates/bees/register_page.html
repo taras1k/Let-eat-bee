@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+{% block title %}Register{% endblock %}
+{% block content_b %}
+<form action="" method="post">
+    {% for field in form %}
+        <div  class="fieldWrapper">
+            {{ field.errors }}
+            {{ field.label_tag }}: {{ field }}
+        </div>
+    {% endfor %}
+    <p><input type="submit" value="Send message" /></p>
+</form>
+{% endblock %}
+

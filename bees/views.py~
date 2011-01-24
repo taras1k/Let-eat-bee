@@ -1,0 +1,53 @@
+# Create your views here.
+from django.conf import settings
+from django.core.context_processors import csrf
+from django.shortcuts import render_to_response
+from mongoengine import *
+from models import *
+from django.views.decorators.csrf import csrf_exempt
+from forms import *
+
+
+@csrf_exempt
+def homepage(request):
+    if request.method == 'POST':
+        if  request.POST['user']  != ''  and request.POST['bee']  != '':
+           user_n = request.POST['user']
+           event_n = request.POST['bee'] 
+           user_db, created = Users.objects.get_or_create(user_name =user_n)
+           bees_event = Events(title = event_n, creator = user_db)
+           bees_event.save()
+    bees = Events.objects
+    title = 'Home, sweat home'
+    return render_to_response("bees/home.html", locals())
+
+def Register(user_data):
+    user = Users(user_name = user_data['user_name'], user_password = user_data['user_password'], user_mail = user_data['user_mail'], user_first_name = user_data['user_first_name'], user_last_name = user_data['user_last_name'])
+    user.save()
+    
+
+@csrf_exempt
+def login(request):
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            return render_to_response('bees/home.html')
+    else:
+        form = LoginForm()
+    return render_to_response('bees/login_page.html', {
+        'form': form,
+    })
+
+@csrf_exempt
+def register(request):
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user_data = {'user_name':form.data['user_name'], 'user_password':form.data['user_password'], 'user_mail':form.data['user_mail'], 'user_first_name':form.data['user_first_name'], 'user_last_name':form.data['user_last_name']}
+            Register(user_data)
+            return render_to_response('bees/home.html')
+    else:
+        form = RegisterForm()
+    return render_to_response('bees/register_page.html', {
+        'form': form,
+    })

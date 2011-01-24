@@ -1,0 +1,53 @@
+from mongoengine import *
+
+# Create your models here.
+
+class Users(Document):
+    user_name = StringField(required=True)
+    user_password = StringField(required=True)
+    user_mail = EmailField(required=True)
+    user_first_name = StringField(required=True)
+    user_last_name = StringField(required=True)
+
+class Reletionships(Document):
+    user_name = ReferenceField(Users)
+    user_friend = ReferenceField(Users)
+
+class Places(Document):
+    place_name = StringField(required = True)
+
+class Events(Document):
+    title = StringField(max_length=120, required=True)
+    creator = ReferenceField(Users)
+    place = ReferenceField(Places)
+    participent_number = IntField()
+
+class EventParticioents(Document):
+    event = ReferenceField(Events)
+    participent = ReferenceField(Users)
+
+class SecurityJoinEvent(Document):
+    event = ReferenceField(Events)
+    permisions = IntField()
+
+class SecurityCommentEvent(Document):
+    event = ReferenceField(Events)
+    permisions = IntField()
+
+class SecurityViewProfile(Document):
+    profile = ReferenceField(Users)
+    permisions = IntField()
+
+class EventComment(Document):
+    event = ReferenceField(Events)
+    user  = ReferenceField(Users)
+    comment = StringField()
+
+class EventFeedback(Document):
+    event = ReferenceField(Events)
+    user  = ReferenceField(Users)
+    comment = StringField()
+
+
+
+

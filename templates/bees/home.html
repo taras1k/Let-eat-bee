@@ -1,0 +1,15 @@
+{% extends 'base.html'%}
+{% block title %}{{ title }}{% endblock %}
+{% block content_b %}
+<h1>Example app</h1>
+  <form action="" method="post">{% csrf_token %}
+        <br/>BEE
+        <input type="text" name="bee">
+        <input type="submit" value="Add">
+    </form>
+<br/>
+{% for bee in bees %}
+<li>{{ bee.title }}</li>
+ <li >{{ bee.creator.username }}</li>
+{% endfor %}
+{% endblock %}
